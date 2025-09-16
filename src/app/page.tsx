@@ -1,26 +1,21 @@
-import Link from "next/link"
-import { LoginForm } from "./_components/login-form"
+import { headers} from "next/headers"
+import {auth} from "@/lib/auth"
+import { ButtonSignOut } from "./_components/button-signout";
+import {redirect} from "next/navigation"
 
-export default function Home() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold">Login</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Entre com suas credenciais para acessar sua conta</p>
-        </div>
+export default async function Home() { // para qualquer pagina privada precisa desse export ele é async!
 
-        <LoginForm />
-
-        <div className="text-center text-sm">
-          <p>
-            Não tem uma conta?{" "}
-            <Link href="/signup" className="font-medium text-primary hover:underline">
-              Cadastre-se
-            </Link>
-          </p>
-        </div>
-      </div>
+  const session = await auth.api.getSession({ // aqui faz a pesquisa se o usuario esta logado
+      headers: await headers() // you need to pass the headers object.
+  })
+  if(!session){
+    redirect("/sign-in")
+  }
+  return ( // depois da verificação padrao vem o conteudo da pagina dentro de return
+    <div className="container mx-auto min-h-screen flex items-center justify-center flex-col">
+      <h1 className="text-2xl font-bold mb-2">Página dashboard</h1>
+      <h3>Usuario logado: Visitante</h3>
+      <ButtonSignOut />
     </div>
-  )
+  );
 }
