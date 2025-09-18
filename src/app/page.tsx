@@ -9,7 +9,7 @@ export default async function Home() { // para qualquer pagina privada precisa d
       headers: await headers() // you need to pass the headers object.
   })
   if(!session){
-    redirect("/sign-in")
+    redirect("/sobre")
   }
   return ( // depois da verificação padrao vem o conteudo da pagina dentro de return
     <div className="container mx-auto min-h-screen flex items-center justify-center flex-col">
